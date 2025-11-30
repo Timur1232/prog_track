@@ -1,0 +1,195 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #1a1a1a;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+/* Заголовок */
+.header {
+    height: 130px;
+    background: #2d2d2d;
+    display: flex;
+    border-bottom: 2px solid #444;
+}
+
+.header-left {
+    flex: 1;
+}
+
+.header-right {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.control-buttons {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.button-group {
+    display: flex;
+    border: none;
+    /* Декоративная рамка */
+    overflow: hidden;
+    gap: 20px;
+}
+
+.control-btn {
+    width: 74px;
+    height: 74px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    /* Добавь фоновые изображения для кнопок */
+}
+
+.start-btn {
+    padding: 10px 30px;
+    background-color: transparent;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+    color: rgba(36, 28, 16, 1);
+    font-family: Cinzel;
+    font-size: 54px;
+    font-weight: 700;
+    line-height: 34px;
+    letter-spacing: -1px;
+    text-align: center;
+}
+
+/* Основная часть */
+.main-content {
+    flex: 1;
+    display: flex;
+}
+
+/* Левая панель выбора */
+.selection-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.class-buttons {
+    display: flex;
+    gap: 50px;
+    margin-top: -100px;
+    align-self: center;
+    /* Заезд на заголовок */
+    position: relative;
+    z-index: 2;
+    max-width: 774px;
+}
+
+.class-btn {
+    margin: auto;
+    margin-top: 97px;
+    height: 174px;
+    width: 156px;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+    /* Добавь стили для картинок классов */
+}
+
+.class-btn-wrapper {
+    flex: 1;
+    display: flex;
+    max-width: 156px;
+    height: 271px;
+    background-color: #333;
+}
+
+.pentagram-section {
+    flex: 1;
+    position: relative;
+    background: url('pentagram-bg.png') center no-repeat;
+    background-size: contain;
+    margin-top: 80px;
+    --radius: 250px;
+}
+
+.ability-btn {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #444;
+    border: 2px solid #666;
+    cursor: pointer;
+    top: 50%;
+    left: 50%;
+    margin-top: -40px;
+    /* Половина высоты кнопки */
+    margin-left: -40px;
+    /* Половина ширины кнопки */
+    transform-origin: center;
+}
+
+.ability-btn:nth-child(1) {
+    transform: translateY(calc(-1 * var(--radius)));
+}
+
+.ability-btn:nth-child(2) {
+    transform: rotate(72deg) translateY(calc(-1 * var(--radius))) rotate(-72deg);
+}
+
+.ability-btn:nth-child(3) {
+    transform: rotate(144deg) translateY(calc(-1 * var(--radius))) rotate(-144deg);
+}
+
+.ability-btn:nth-child(4) {
+    transform: rotate(216deg) translateY(calc(-1 * var(--radius))) rotate(-216deg);
+}
+
+.ability-btn:nth-child(5) {
+    transform: rotate(288deg) translateY(calc(-1 * var(--radius))) rotate(-288deg);
+}
+
+/* Правая панель с моделью */
+.model-panel {
+    flex: 1;
+    display: flex;
+    background: #252525;
+    /* Фон области модели */
+    position: relative;
+}
+
+.decor-column {
+    width: 60px;
+    background: #333;
+    /* Замени на изображение колонны */
+}
+
+.model-canvas {
+    flex: 1;
+    background: #1a1a1a;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Пол */
+.floor {
+    height: 50px;
+    background: #2d2d2d;
+    border-top: 2px solid #444;
+}

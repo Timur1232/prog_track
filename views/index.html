@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <title>3D Фигурки</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/styles/style.css">
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.181.2/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.181.2/examples/jsm/"
+      }
+    }
+    </script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-left"></div>
+        <div class="header-right">
+            <div class="control-buttons">
+                <div class="control-buttons">
+                    <div class="button-group">
+                        <button class="control-btn" id="fullscreen-btn"><img src="media/fullscreen.icon.png"
+                                alt="" /></button>
+                        <button class="control-btn" id="achievements-btn"><img src="media/achievments.icon.png"
+                                alt="" /></button>
+                    </div>
+                    <button class="start-btn">START</button>
+                    <div class="button-group">
+                        <button class="control-btn" id="settings-btn"><img src="media/settings.icon.png"
+                                alt="" /></button>
+                        <button class="control-btn" id="exit-btn"><img src="media/exit.icon.png" alt="" /></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="selection-panel">
+            <div class="class-buttons">
+                <div class="class-btn-wrapper">
+                    <button class="class-btn"><img width="156px" height="174px" src="media/sword.icon.png"
+                            alt="" /></button>
+                </div>
+                <div class="class-btn-wrapper">
+                    <button class="class-btn"><img width="156px" height="174px" src="media/bow.icon.png"
+                            alt="" /></button>
+                </div>
+                <div class="class-btn-wrapper">
+                    <button class="class-btn"><img width="156px" height="174px" src="media/wand.icon.png"
+                            alt="" /></button>
+                </div>
+                <div class="class-btn-wrapper">
+                    <button class="class-btn"><img width="156px" height="174px" src="media/hammer.icon.png"
+                            alt="" /></button>
+                </div>
+            </div>
+            <div class="pentagram-section">
+                <button class="ability-btn"><!-- Способность 1 --></button>
+                <button class="ability-btn"><!-- Способность 2 --></button>
+                <button class="ability-btn"><!-- Способность 3 --></button>
+                <button class="ability-btn"><!-- Способность 4 --></button>
+                <button class="ability-btn"><!-- Способность 5 --></button>
+            </div>
+        </section>
+
+        <section class="model-panel">
+            <div class="decor-column"><!-- Декоративная колонна --></div>
+            <div class="model-canvas"><canvas id="canvas"></canvas></div>
+            <div class="decor-column"><!-- Декоративная колонна --></div>
+        </section>
+    </main>
+
+    <div class="floor"><!-- Декоративный пол --></div>
+</body>
+
+</html>
