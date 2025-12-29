@@ -1,58 +1,26 @@
 'use strict'
 
 import * as THREE from 'three';
-import { modelManager } from './models.js';
-import WebGL from 'three/addons/capabilities/WebGL.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import ModelController from './controller.js';
 
-let scene, camera, renderer, canvas;
+let scene, camera, renderer;
 let currentCharacter = null;
 let currentStand = null;
-let animationId = null;
+let currentClass = 'mage';
+let currentAbility = 'ability1';
 
-const appState = {
-    selectedClass: 'mage',
-    selectedAbility: 'ability1',
-    isModelLoaded: false
+const loader = new GLTFLoader();
+
+const models = {
+    classes: {},
+    abilities: {}
 };
 
-if (WebGL.isWebGL2Available()) {
-    initializeApp();
-} else {
-    const warning = WebGL.getWebGL2ErrorMessage();
-    document.body.innerHTML = `<div style="padding: 20px; color: red;">${warning}</div>`;
-    console.error(warning);
-}
-
-async function initializeApp() {
-    try {
-        canvas = document.getElementById('canvas');
-        initScene();
-        setupLoadingHandlers();
-        await modelManager.loadAll();
-        hideLoadingScreen();
-        createModel();
-        setupLighting();
-        setupEventListeners();
-        startAnimation();
-    } catch (error) {
-        console.error('ошибка инициализации:', error);
-        document.getElementById('loading-text').textContent =
-            `ошибка загрузки: ${error.message}`;
-    }
-}
-
-function initScene() {
-    renderer = new THREE.WebGLRenderer({
-        antialias: true,
-        canvas: canvas,
-        alpha: true,
-        powerPreference: "high-performance"
-    });
-
+function init() {
+    const canvas = document.getElementById('canvas');
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf0f0f0);
@@ -63,131 +31,104 @@ function initScene() {
         0.1,
         1000
     );
-    camera.position.set(0, 2, 8);
-    camera.lookAt(0, 1, 0);
+    camera.position.set(0, 2, 10);
+
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(5, 10, 5);
+    scene.add(light);
+    scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+
+    loadAllModels();
 }
 
-function setupLoadingHandlers() {
-    modelManager.onProgress((key, type, _) => {
-        const loadingText = document.getElementById('loading-text');
-        const typeName = type === 'class' ? 'класс' : 'способность';
-        loadingText.textContent = `загрузка ${typeName}: ${key}...`;
-    });
-
-    modelManager.onComplete(() => {
-        appState.isModelLoaded = true;
-        console.log('менеджер моделей готов');
-    });
-
-    modelManager.onError((error) => {
-        console.error('Ошибка в менеджере моделей:', error);
-    });
-}
-
-function hideLoadingScreen() {
-    const loadingScreen = document.getElementById('loading-screen');
-    if (loadingScreen) {
-        loadingScreen.style.opacity = '0';
-        setTimeout(() => {
-            loadingScreen.style.display = 'none';
-        }, 500);
-    }
-}
-
-function createModel() {
-    if (currentCharacter) {
-        scene.remove(currentCharacter);
-        currentCharacter = null;
-    }
-    if (currentStand) {
-        scene.remove(currentStand);
-        currentStand = null;
-    }
-
-    const characterModel = modelManager.getClass(appState.selectedClass);
-    const standModel = modelManager.getAbility(appState.selectedAbility);
-
-    if (!characterModel || !standModel) {
-        console.warn('модели не загружены');
-        return;
-    }
-
-    currentCharacter = characterModel;
-    currentCharacter.position.set(0, 1.5, 0);
-    currentCharacter.scale.set(0.8, 0.8, 0.8);
-
-    currentStand = standModel;
-    currentStand.position.set(0, 0, 0);
-    currentStand.scale.set(1.2, 1.2, 1.2);
-
-    scene.add(currentCharacter);
-    scene.add(currentStand);
-}
-
-function setupLighting() {
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-    scene.add(ambientLight);
-
-    const mainLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    mainLight.position.set(5, 10, 5);
-    mainLight.castShadow = true;
-    mainLight.shadow.mapSize.width = 2048;
-    mainLight.shadow.mapSize.height = 2048;
-    scene.add(mainLight);
-
-    const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
-    fillLight.position.set(-5, 5, -5);
-    scene.add(fillLight);
-
-    const backLight = new THREE.DirectionalLight(0xffffff, 0.2);
-    backLight.position.set(0, 5, -10);
-    scene.add(backLight);
-}
-
-function setupEventListeners() {
-    window.addEventListener('resize', function(_) {
-        camera.aspect = canvas.clientWidth / canvas.clientHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-    });
-}
-
-function startAnimation() {
-    function animate() {
-        animationId = requestAnimationFrame(animate);
-        if (currentCharacter) {
-            currentCharacter.rotation.y += 0.005;
+async function loadAllModels() {
+    const classes = ['mage', 'warrior', 'archer', 'paladin'];
+    const abilities = ['ability1', 'ability2', 'ability3', 'ability4', 'ability5'];
+    try {
+        for (const className of classes) {
+            const model = await loadModel(`models/${className}.glb`);
+            models.classes[className] = model;
+            console.log(`загружен: ${className}`);
         }
-        renderer.render(scene, camera);
+
+        for (const ability of abilities) {
+            // const model = await loadModel(`models/${ability}.glb`);
+            const model = await loadModel(`models/placeholder.glb`);
+            models.abilities[ability] = model;
+            console.log(`загружена: ${ability}`);
+        }
+        createCurrentModel();
+        setupButtons();
+        animate();
+    } catch (error) {
+        console.error('ошибка загрузки:', error);
     }
-    animate();
 }
 
-export function changeCharacterClass(className) {
-    if (modelManager.models.classes[className]) {
-        appState.selectedClass = className;
-        createModel();
-        return true;
-    }
-    return false;
+function loadModel(path) {
+    return new Promise((resolve, reject) => {
+        loader.load(
+            path,
+            (gltf) => resolve(gltf.scene),
+            null,
+            (error) => reject(error)
+        );
+    });
 }
 
-export function changeAbility(abilityName) {
-    if (modelManager.models.abilities[abilityName]) {
-        appState.selectedAbility = abilityName;
-        createModel();
-        return true;
+let modelController;
+let modelGroup;
+
+function createCurrentModel() {
+    const character = models.classes[currentClass];
+    const stand = models.abilities[currentAbility];
+
+    if (!character || !stand) return;
+
+    const newCharacter = character.clone();
+    const newStand = stand.clone();
+
+    if (!modelGroup) {
+        modelGroup = new THREE.Group();
+        scene.add(modelGroup);
+        modelController = new ModelController(modelGroup);
     }
-    return false;
+
+    modelController.setModels(newCharacter, newStand);
 }
 
-export function getCurrentState() {
-    return { ...appState };
+function setupButtons() {
+    const classButtons = document.querySelectorAll('.class-btn');
+    classButtons.forEach((btn, index) => {
+        btn.addEventListener('click', () => {
+            const classes = ['mage', 'warrior', 'archer', 'paladin'];
+            currentClass = classes[index];
+            createCurrentModel();
+        });
+    });
+
+    const abilityButtons = document.querySelectorAll('.ability-btn');
+    abilityButtons.forEach((btn, index) => {
+        btn.addEventListener('click', () => {
+            currentAbility = `ability${index + 1}`;
+            createCurrentModel();
+        });
+    });
 }
 
-window.addEventListener('beforeunload', () => {
-    if (animationId) {
-        cancelAnimationFrame(animationId);
+function animate() {
+    requestAnimationFrame(animate);
+    if (modelController) {
+        modelController.update();
     }
-    modelManager.dispose();
+    renderer.render(scene, camera);
+}
+
+window.addEventListener('resize', () => {
+    const canvas = document.getElementById('canvas');
+    camera.aspect = canvas.width / canvas.height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(canvas.width, canvas.height, false);
 });
+
+init();
