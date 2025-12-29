@@ -121,7 +121,7 @@ body {
     /* background: url('pentagram-bg.png') center no-repeat;*/
     background-size: contain;
     margin-top: 80px;
-    --radius: 250px;
+    --radius: 200px;
 }
 
 .ability-btn {

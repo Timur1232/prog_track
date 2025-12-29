@@ -3,12 +3,13 @@
 import * as THREE from 'three';
 
 export default class ModelController {
-    constructor(modelGroup) {
+    constructor(modelGroup, canvas) {
         this.group = modelGroup;
+        this.canvas = canvas;
 
-        this.rotationY = 0;
+        this.rotationY = 179;
         this.rotationX = 0;
-        this.targetRotationY = 0;
+        this.targetRotationY = 179;
         this.targetRotationX = 0;
 
         this.velocityY = 0.01;
@@ -32,9 +33,15 @@ export default class ModelController {
     }
 
     onMouseDown(e) {
-        this.isDragging = true;
-        this.lastMouseX = e.clientX;
-        this.lastMouseY = e.clientY;
+        const rect = this.canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+            this.isDragging = true;
+            this.lastMouseX = e.clientX;
+            this.lastMouseY = e.clientY;
+        }
     }
 
     onMouseMove(e) {
