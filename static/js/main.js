@@ -145,13 +145,11 @@ function setupLighting() {
 }
 
 function setupEventListeners() {
-    window.addEventListener('resize', onWindowResize);
-}
-
-function onWindowResize() {
-    camera.aspect = canvas.clientWidth / canvas.clientHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    window.addEventListener('resize', function(_) {
+        camera.aspect = canvas.clientWidth / canvas.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    });
 }
 
 function startAnimation() {
