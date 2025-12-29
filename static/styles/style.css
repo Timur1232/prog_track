@@ -118,7 +118,7 @@ body {
 .pentagram-section {
     flex: 1;
     position: relative;
-    background: url('pentagram-bg.png') center no-repeat;
+    /* background: url('pentagram-bg.png') center no-repeat;*/
     background-size: contain;
     margin-top: 80px;
     --radius: 250px;
@@ -192,4 +192,47 @@ canvas {
     height: 50px;
     background: #2d2d2d;
     border-top: 2px solid #444;
+}
+
+/* Загрузка */
+
+.loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #1a1a2e;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 0.5s ease;
+}
+
+.loading-box {
+    text-align: center;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.loading-progress {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #00b4db, #0083b0);
+    transition: width 0.3s ease;
+    text-align: center;
+    color: white;
+    font-size: 12px;
+    line-height: 20px;
+}
+
+.loading-progress-box {
+    width: 300px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
 }

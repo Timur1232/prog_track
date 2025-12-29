@@ -17,6 +17,19 @@
 </head>
 
 <body>
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-box">
+            <p style="font-size: 1.2em; margin-bottom: 40px;">Загрузка моделей...</p>
+
+            <div class="loading-progress">
+                <div id="loading-progress" class="loading-progress"></div>
+            </div>
+
+            <p id="loading-text" style="font-size: 0.9em; color: #aaa;">
+                Инициализация...
+            </p>
+        </div>
+    </div>
     <header class="header">
         <div class="header-left"></div>
         <div class="header-right">
@@ -76,6 +89,7 @@
     </main>
 
     <div class="floor"><!-- Декоративный пол --></div>
+    <script src="/js/main.js" type="module"></script>
 </body>
 
 </html>
